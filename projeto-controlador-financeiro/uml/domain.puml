@@ -1,0 +1,51 @@
+@startuml
+title Domain Model - Finance Control App
+
+class Money {
+  - amount: Decimal
+  + Money(amount)
+  + amount: Decimal
+  + to_dict(): dict
+  + from_dict(d): Money
+  + __add__(other): Money
+  + __sub__(other): Money
+}
+
+class Category { + name: str }
+class Transaction {
+  + id: str
+  + type: income|expense
+  + amount: Money
+  + description: str
+  + category: Category
+  + occurred_at: datetime
+  + signed_amount(): Money
+  + to_dict(): dict
+  + from_dict(d): Transaction
+}
+
+class ITransactionRepository {
+  + list(): list<Transaction>
+  + by_id(id): Transaction
+  + add(tx): void
+  + remove(id): bool
+  + replace_all(items): void
+}
+
+class JSONTransactionRepository
+class JSONStorage
+class FinanceService {
+  + add_transaction(...): Transaction
+  + list_transactions(): list<Transaction>
+  + remove(id): bool
+  + balance(): Money
+  + report(group_by): dict
+}
+
+Transaction "1" o-- "1" Money
+Transaction "1" o-- "1" Category
+ITransactionRepository <|.. JSONTransactionRepository
+JSONTransactionRepository *-- JSONStorage
+FinanceService --> ITransactionRepository
+
+@enduml

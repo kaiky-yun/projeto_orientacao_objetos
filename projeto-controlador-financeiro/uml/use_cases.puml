@@ -1,0 +1,20 @@
+@startuml
+title Use Cases - Finance Control App
+
+actor "Usuário (Aluno)" as User
+
+rectangle "Sistema" {
+  usecase "Adicionar Transação" as UC1
+  usecase "Listar Transações" as UC2
+  usecase "Consultar Saldo" as UC3
+  usecase "Relatório por Categoria/Mês" as UC4
+  usecase "Remover Transação" as UC5
+}
+
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+User --> UC5
+
+@enduml

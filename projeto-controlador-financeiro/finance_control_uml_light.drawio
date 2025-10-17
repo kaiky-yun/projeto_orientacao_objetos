@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<mxfile>
+  <diagram name="Finance Control - UML (Light)">
+    <mxGraphModel dx="1434" dy="755" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="Transaction" value="&lt;b&gt;Transaction&lt;/b&gt;&lt;hr&gt;+ id: str&lt;br&gt;+ type: &quot;income&quot;|&quot;expense&quot;&lt;br&gt;+ description: str&lt;br&gt;+ occurred_at: datetime&lt;br&gt;+ amount: Money&lt;br&gt;+ category: Category&lt;hr&gt;+ signed_amount: Money &amp;lt;&amp;lt;property&amp;gt;&amp;gt;&lt;br&gt;+ to_dict()&lt;br&gt;+ from_dict()" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="320" height="252" as="geometry"/>
+        </mxCell>
+        <mxCell id="Money" value="&lt;b&gt;Money&lt;/b&gt;&lt;hr&gt;- _amount: Decimal&lt;br&gt;+ amount: Decimal &amp;lt;&amp;lt;property&amp;gt;&amp;gt;&lt;hr&gt;+ __add__()&lt;br&gt;+ __sub__()&lt;br&gt;+ __neg__()&lt;br&gt;+ to_dict()&lt;br&gt;+ from_dict()" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="40" y="370" width="280" height="216" as="geometry"/>
+        </mxCell>
+        <mxCell id="Category" value="&lt;b&gt;Category&lt;/b&gt;&lt;hr&gt;+ name: str&lt;hr&gt;&amp;nbsp;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="380" y="370" width="220" height="126" as="geometry"/>
+        </mxCell>
+        <mxCell id="IRepo" value="&lt;b&gt;ITransactionRepository «interface»&lt;/b&gt;&lt;hr&gt;+ list(): list[Transaction]&lt;br&gt;+ by_id(id): Transaction|None&lt;br&gt;+ add(tx): None&lt;br&gt;+ remove(id): bool&lt;br&gt;+ replace_all(items): None&lt;hr&gt;&amp;nbsp;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="530" y="40" width="340" height="198" as="geometry"/>
+        </mxCell>
+        <mxCell id="JSONRepo" value="&lt;b&gt;JSONTransactionRepository&lt;/b&gt;&lt;hr&gt;- storage: JSONStorage&lt;hr&gt;+ list()&lt;br&gt;+ by_id(id)&lt;br&gt;+ add(tx)&lt;br&gt;+ remove(id)&lt;br&gt;+ replace_all(items)" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="560" y="300" width="320" height="198" as="geometry"/>
+        </mxCell>
+        <mxCell id="JSONStorage" value="&lt;b&gt;JSONStorage&lt;/b&gt;&lt;hr&gt;- file_path: Path&lt;hr&gt;+ get_all(): list[dict]&lt;br&gt;+ save_all(transactions): None" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="590" y="560" width="280" height="144" as="geometry"/>
+        </mxCell>
+        <mxCell id="Service" value="&lt;b&gt;FinanceService&lt;/b&gt;&lt;hr&gt;- repo: ITransactionRepository&lt;hr&gt;+ add_transaction()&lt;br&gt;+ list_transactions()&lt;br&gt;+ remove(id): bool&lt;br&gt;+ balance(): Money&lt;br&gt;+ report(group_by): dict[str, Money]" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="920" y="300" width="340" height="198" as="geometry"/>
+        </mxCell>
+        <mxCell id="CLI" value="&lt;b&gt;CLI (Interface)&lt;/b&gt;&lt;hr&gt;&amp;nbsp;&lt;hr&gt;+ interactive_loop()&lt;br&gt;+ ask()&lt;br&gt;+ ask_type()&lt;br&gt;+ ask_amount()&lt;br&gt;+ print_tx()&lt;br&gt;+ fmt_money()" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="300" width="280" height="216" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" style="endArrow=none;startArrow=diamond;startFill=1;strokeColor=#000000;" edge="1" parent="1" source="Transaction" target="Money">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" style="endArrow=none;startArrow=diamond;startFill=1;strokeColor=#000000;" edge="1" parent="1" source="Transaction" target="Category">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" style="endArrow=none;startArrow=diamond;startFill=1;strokeColor=#000000;" edge="1" parent="1" source="JSONRepo" target="JSONStorage">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e4" style="dashed=1;endArrow=block;endFill=0;strokeColor=#000000;" edge="1" parent="1" source="JSONRepo" target="IRepo">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e5" style="dashed=1;endArrow=open;endFill=0;strokeColor=#000000;" edge="1" parent="1" source="Service" target="IRepo">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e6" style="endArrow=block;endFill=1;strokeColor=#000000;" edge="1" parent="1" source="CLI" target="Service">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

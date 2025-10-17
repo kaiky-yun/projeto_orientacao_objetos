@@ -1,0 +1,7 @@
+#!/Users/kaikymoreirayun/Documents/GitHub/projeto_orientacao_objetos/projeto-controlador-financeiro/.venv/bin/python3.12
+import sys
+from cpuinfo import main
+if __name__ == '__main__':
+    if sys.argv[0].endswith('.exe'):
+        sys.argv[0] = sys.argv[0][:-4]
+    sys.exit(main())
