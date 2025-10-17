@@ -113,39 +113,6 @@ Os diagramas UML foram criados com **PlantUML** para representar:
 
 ---
 
-## 🧪 Roteiro de Apresentação (para vídeo)
-
-### 🕐 1. Introdução
-- Objetivo do projeto e contexto da disciplina.
-- Explicar que o foco foi aplicar POO com um caso real: controle financeiro pessoal.
-
-### 🧱 2. Arquitetura
-- Mostrar a estrutura do projeto e explicar cada camada.
-- Justificar uso dos padrões Repository, Service e Value Object.
-
-### 💡 3. Domínio
-- Apresentar `Transaction`, `Category` e `Money`.
-- Mostrar como o modelo garante integridade e coesão.
-
-### 💾 4. Persistência
-- Explicar o fluxo: `JSONStorage → Repository → FinanceService`.
-
-### 🖥️ 5. Demonstração
-- Mostrar o menu interativo no terminal.
-- Adicionar, listar, ver saldo, gerar relatórios e remover lançamentos.
-
-### 🧪 6. Testes
-- Executar `pytest -q` e explicar a cobertura.
-- Comentar sobre o benchmark de performance.
-
-### 🧭 7. UML
-- Exibir os diagramas UML e explicar as relações entre classes.
-
-### 🎬 8. Conclusão
-- Comentar sobre aprendizados e melhorias futuras (ex: GUI, SQLite, API REST).
-
----
-
 ## 🚀 Próximos Passos
 
 - Adicionar suporte a múltiplos usuários.
