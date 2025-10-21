@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controlador Financeiro</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>💰 Controlador Financeiro</h1>
+                <p class="subtitle">Gerencie suas receitas e despesas</p>
+            </div>
+            <div class="api-status">
+                <span id="api-status-indicator" class="status-dot"></span>
+                <span id="api-status-text">Conectando...</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <nav class="nav-menu">
+                    <button class="nav-btn active" data-section="dashboard">
+                        📊 Dashboard
+                    </button>
+                    <button class="nav-btn" data-section="transactions">
+                        📋 Transações
+                    </button>
+                    <button class="nav-btn" data-section="reports">
+                        📈 Relatórios
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="content">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="section active">
+                    <h2>Dashboard</h2>
+                    
+                    <!-- Balance Card -->
+                    <div class="balance-card">
+                        <div class="balance-item">
+                            <span class="balance-label">Saldo Total</span>
+                            <span id="balance-value" class="balance-amount">R$ 0,00</span>
+                        </div>
+                        <div class="balance-item">
+                            <span class="balance-label">Total de Transações</span>
+                            <span id="transaction-count" class="balance-amount">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="stats-grid">
+                        <div class="stat-card income">
+                            <h3>Receitas</h3>
+                            <p id="total-income" class="stat-value">R$ 0,00</p>
+                        </div>
+                        <div class="stat-card expense">
+                            <h3>Despesas</h3>
+                            <p id="total-expense" class="stat-value">R$ 0,00</p>
+                        </div>
+                    </div>
+
+                    <!-- Recent Transactions -->
+                    <div class="section-card">
+                        <h3>Transações Recentes</h3>
+                        <div id="recent-transactions" class="transactions-list">
+                            <p class="empty-state">Nenhuma transação encontrada</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Transactions Section -->
+                <section id="transactions" class="section">
+                    <h2>Gerenciar Transações</h2>
+                    
+                    <!-- Add Transaction Form -->
+                    <div class="section-card form-card">
+                        <h3>Adicionar Nova Transação</h3>
+                        <form id="transaction-form" class="transaction-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="tx-type">Tipo *</label>
+                                    <select id="tx-type" name="type" required>
+                                        <option value="">Selecione...</option>
+                                        <option value="income">Receita</option>
+                                        <option value="expense">Despesa</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tx-amount">Valor *</label>
+                                    <input type="number" id="tx-amount" name="amount" placeholder="0,00" step="0.01" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="tx-category">Categoria *</label>
+                                    <input type="text" id="tx-category" name="category" placeholder="Ex: Alimentação" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tx-date">Data</label>
+                                    <input type="datetime-local" id="tx-date" name="occurred_at">
+                                </div>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="tx-description">Descrição *</label>
+                                <textarea id="tx-description" name="description" placeholder="Descreva a transação" required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Adicionar Transação</button>
+                        </form>
+                    </div>
+
+                    <!-- Transactions List -->
+                    <div class="section-card">
+                        <h3>Todas as Transações</h3>
+                        <div class="transactions-filter">
+                            <input type="text" id="filter-search" placeholder="Buscar por descrição...">
+                            <select id="filter-type">
+                                <option value="">Todos os tipos</option>
+                                <option value="income">Receitas</option>
+                                <option value="expense">Despesas</option>
+                            </select>
+                        </div>
+                        <div id="all-transactions" class="transactions-list">
+                            <p class="empty-state">Nenhuma transação encontrada</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Reports Section -->
+                <section id="reports" class="section">
+                    <h2>Relatórios</h2>
+                    
+                    <!-- Report Options -->
+                    <div class="section-card">
+                        <h3>Gerar Relatório</h3>
+                        <div class="report-options">
+                            <button id="report-by-category" class="btn btn-secondary active">Por Categoria</button>
+                            <button id="report-by-month" class="btn btn-secondary">Por Mês</button>
+                        </div>
+                    </div>
+
+                    <!-- Report Display -->
+                    <div class="section-card">
+                        <h3 id="report-title">Relatório por Categoria</h3>
+                        <div id="report-content" class="report-content">
+                            <p class="empty-state">Carregando relatório...</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Scripts -->
+    <script src="api-client.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
