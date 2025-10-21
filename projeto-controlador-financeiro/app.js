@@ -238,7 +238,7 @@ class FinanceApp {
             return;
         }
 
-        const reportData = result.data.data.data || {};
+        const reportData = result.data.data || {};
         const entries = Object.entries(reportData);
 
         if (entries.length === 0) {
