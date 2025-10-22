@@ -61,9 +61,18 @@ class FinanceAPIClient {
 
     /**
      * Listar todas as transações
+     * @param {string} startDate - Data inicial (YYYY-MM-DD)
+     * @param {string} endDate - Data final (YYYY-MM-DD)
      */
-    async getTransactions() {
-        return this.request('/api/transactions');
+    async getTransactions(startDate = null, endDate = null) {
+        let endpoint = '/api/transactions';
+        const params = [];
+        if (startDate) params.push(`start_date=${startDate}`);
+        if (endDate) params.push(`end_date=${endDate}`);
+        if (params.length > 0) {
+            endpoint += '?' + params.join('&');
+        }
+        return this.request(endpoint);
     }
 
     /**
@@ -95,17 +104,31 @@ class FinanceAPIClient {
 
     /**
      * Obter saldo total
+     * @param {string} startDate - Data inicial (YYYY-MM-DD)
+     * @param {string} endDate - Data final (YYYY-MM-DD)
      */
-    async getBalance() {
-        return this.request('/api/balance');
+    async getBalance(startDate = null, endDate = null) {
+        let endpoint = '/api/balance';
+        const params = [];
+        if (startDate) params.push(`start_date=${startDate}`);
+        if (endDate) params.push(`end_date=${endDate}`);
+        if (params.length > 0) {
+            endpoint += '?' + params.join('&');
+        }
+        return this.request(endpoint);
     }
 
     /**
      * Gerar relatório agrupado por categoria ou mês
      * @param {string} groupBy - 'category' ou 'month'
+     * @param {string} startDate - Data inicial (YYYY-MM-DD)
+     * @param {string} endDate - Data final (YYYY-MM-DD)
      */
-    async getReport(groupBy = 'category') {
-        return this.request(`/api/report?group_by=${groupBy}`);
+    async getReport(groupBy = 'category', startDate = null, endDate = null) {
+        let endpoint = `/api/report?group_by=${groupBy}`;
+        if (startDate) endpoint += `&start_date=${startDate}`;
+        if (endDate) endpoint += `&end_date=${endDate}`;
+        return this.request(endpoint);
     }
 
     /**

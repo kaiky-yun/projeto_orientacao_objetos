@@ -43,6 +43,31 @@
                 <section id="dashboard" class="section active">
                     <h2>Dashboard</h2>
                     
+                    <!-- Time Filter -->
+                    <div class="section-card filter-card">
+                        <h3>Filtro de Período</h3>
+                        <div class="filter-controls">
+                            <div class="filter-preset-buttons">
+                                <button class="filter-btn active" data-filter="all">Tudo</button>
+                                <button class="filter-btn" data-filter="today">Hoje</button>
+                                <button class="filter-btn" data-filter="week">Última Semana</button>
+                                <button class="filter-btn" data-filter="month">Último Mês</button>
+                                <button class="filter-btn" data-filter="custom">Customizado</button>
+                            </div>
+                            <div id="custom-date-range" class="custom-date-range" style="display: none;">
+                                <div class="date-input-group">
+                                    <label for="filter-start-date">Data Inicial</label>
+                                    <input type="date" id="filter-start-date">
+                                </div>
+                                <div class="date-input-group">
+                                    <label for="filter-end-date">Data Final</label>
+                                    <input type="date" id="filter-end-date">
+                                </div>
+                                <button class="btn btn-primary" id="apply-custom-filter">Aplicar Filtro</button>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <!-- Balance Card -->
                     <div class="balance-card">
                         <div class="balance-item">

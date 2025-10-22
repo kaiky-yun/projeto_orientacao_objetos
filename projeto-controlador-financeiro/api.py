@@ -5,7 +5,7 @@ Expõe as funcionalidades do FinanceService através de endpoints HTTP.
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 import os
 
@@ -21,10 +21,54 @@ def create_app():
     CORS(app)  # Habilitar CORS para requisições do frontend
     
     # Inicializar o repositório e serviço
+    # CORREÇÃO AQUI: Ajuste no escape da string para evitar SyntaxError
     storage_path = os.getenv('FINANCE_DB_PATH', os.path.expanduser('~/.finance_app/transactions.json'))
     storage = JSONStorage(storage_path)
     repository = JSONTransactionRepository(storage)
     service = FinanceService(repository)
+    
+    # ==================== FUNÇÕES AUXILIARES ====================
+    
+    def parse_date(date_str, end_of_day=False):
+        """Parsear string de data no formato YYYY-MM-DD e retornar datetime com fuso horário UTC.
+        Se end_of_day for True, define a hora para 23:59:59.
+        """
+        if not date_str:
+            return None
+        try:
+            dt = datetime.fromisoformat(date_str)
+            # Se a data não tiver fuso horário, assume UTC
+            if dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None:
+                dt = dt.replace(tzinfo=timezone.utc)
+            
+            if end_of_day:
+                dt = dt.replace(hour=23, minute=59, second=59, microsecond=999999)
+            return dt
+        except ValueError:
+            return None
+    
+    def filter_transactions_by_date(transactions, start_date=None, end_date=None):
+        """Filtrar transações por período de tempo.
+        Compara datas garantindo que ambas são timezone-aware (UTC).
+        """
+        if not start_date and not end_date:
+            return transactions
+        
+        filtered = []
+        for tx in transactions:
+            # Garantir que tx.occurred_at é timezone-aware (UTC)
+            tx_date = tx.occurred_at
+            if tx_date.tzinfo is None or tx_date.tzinfo.utcoffset(tx_date) is None:
+                tx_date = tx_date.replace(tzinfo=timezone.utc)
+            
+            if start_date and tx_date < start_date:
+                continue
+            if end_date and tx_date > end_date:
+                continue
+            
+            filtered.append(tx)
+        
+        return filtered
     
     # ==================== ENDPOINTS ====================
     
@@ -35,9 +79,24 @@ def create_app():
     
     @app.route('/api/transactions', methods=['GET'])
     def list_transactions():
-        """Listar todas as transações ordenadas por data."""
+        """
+        Listar transações ordenadas por data.
+        Query params opcionais:
+        - start_date: Data inicial (YYYY-MM-DD)
+        - end_date: Data final (YYYY-MM-DD)
+        """
         try:
             transactions = service.list_transactions()
+            
+            # Aplicar filtro de data se fornecido
+            start_date_str = request.args.get('start_date')
+            end_date_str = request.args.get('end_date')
+            
+            start_dt = parse_date(start_date_str)
+            end_dt = parse_date(end_date_str, end_of_day=True)
+            
+            transactions = filter_transactions_by_date(transactions, start_dt, end_dt)
+            
             return jsonify({
                 'success': True,
                 'data': [tx.to_dict() for tx in transactions]
@@ -70,7 +129,9 @@ def create_app():
             occurred_at = None
             if 'occurred_at' in data and data['occurred_at']:
                 try:
-                    occurred_at = datetime.fromisoformat(data['occurred_at'])
+                    # Garante que a data salva é timezone-aware (UTC)
+                    dt_naive = datetime.fromisoformat(data['occurred_at'])
+                    occurred_at = dt_naive.replace(tzinfo=timezone.utc)
                 except ValueError:
                     return jsonify({
                         'success': False,
@@ -133,9 +194,29 @@ def create_app():
     
     @app.route('/api/balance', methods=['GET'])
     def get_balance():
-        """Obter o saldo total (receitas - despesas)."""
+        """
+        Obter o saldo total (receitas - despesas).
+        Query params opcionais:
+        - start_date: Data inicial (YYYY-MM-DD)
+        - end_date: Data final (YYYY-MM-DD)
+        """
         try:
-            balance = service.balance()
+            transactions = service.list_transactions()
+            
+            # Aplicar filtro de data se fornecido
+            start_date_str = request.args.get('start_date')
+            end_date_str = request.args.get('end_date')
+            
+            start_dt = parse_date(start_date_str)
+            end_dt = parse_date(end_date_str, end_of_day=True)
+            
+            transactions = filter_transactions_by_date(transactions, start_dt, end_dt)
+            
+            # Calcular saldo
+            balance = Money(0)
+            for tx in transactions:
+                balance = balance + tx.signed_amount
+            
             return jsonify({
                 'success': True,
                 'data': {
@@ -150,7 +231,10 @@ def create_app():
     def get_report():
         """
         Gerar relatório agrupado por categoria ou mês.
-        Query param: group_by (default: 'category', options: 'category', 'month')
+        Query params:
+        - group_by: 'category' ou 'month' (default: 'category')
+        - start_date: Data inicial (YYYY-MM-DD) - opcional
+        - end_date: Data final (YYYY-MM-DD) - opcional
         """
         try:
             group_by = request.args.get('group_by', 'category')
@@ -161,12 +245,36 @@ def create_app():
                     'error': 'group_by deve ser "category" ou "month"'
                 }), 400
             
-            # Mapear 'month' para o formato esperado pelo serviço
-            group_key = 'category' if group_by == 'category' else 'month'
-            report = service.report(group_by=group_key)
+            # Obter transações
+            transactions = service.list_transactions()
+            
+            # Aplicar filtro de data se fornecido
+            start_date_str = request.args.get('start_date')
+            end_date_str = request.args.get('end_date')
+            
+            start_dt = parse_date(start_date_str)
+            end_dt = parse_date(end_date_str, end_of_day=True)
+            
+            transactions = filter_transactions_by_date(transactions, start_dt, end_dt)
+            
+            # Gerar relatório
+            from collections import defaultdict
+            groups = defaultdict(lambda: Money(0))
+            
+            for tx in transactions:
+                if group_by == 'category':
+                    key = tx.category.name
+                else:  # month
+                    # Garante que a data é timezone-aware antes de formatar
+                    tx_date_aware = tx.occurred_at
+                    if tx_date_aware.tzinfo is None or tx_date_aware.tzinfo.utcoffset(tx_date_aware) is None:
+                        tx_date_aware = tx_date_aware.replace(tzinfo=timezone.utc)
+                    key = tx_date_aware.strftime("%Y-%m")
+                
+                groups[key] = groups[key] + tx.signed_amount
             
             # Converter Money para string para serialização JSON
-            report_data = {key: str(value.amount) for key, value in report.items()}
+            report_data = {key: str(value.amount) for key, value in groups.items()}
             
             return jsonify({
                 'success': True,
@@ -211,4 +319,3 @@ def create_app():
 if __name__ == '__main__':
     app = create_app()
     app.run(debug=True, host='0.0.0.0', port=5010)
-

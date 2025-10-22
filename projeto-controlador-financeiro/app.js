@@ -8,6 +8,9 @@ class FinanceApp {
         this.transactions = [];
         this.categories = [];
         this.currentReportType = 'category';
+        this.currentFilter = 'all';
+        this.filterStartDate = null;
+        this.filterEndDate = null;
         this.init();
     }
 
@@ -40,6 +43,12 @@ class FinanceApp {
         // Relatórios
         document.getElementById('report-by-category').addEventListener('click', () => this.switchReport('category'));
         document.getElementById('report-by-month').addEventListener('click', () => this.switchReport('month'));
+
+        // Filtros de tempo
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => this.handleFilterChange(e.target.dataset.filter));
+        });
+        document.getElementById('apply-custom-filter').addEventListener('click', () => this.applyCustomFilter());
     }
 
     /**
@@ -106,24 +115,127 @@ class FinanceApp {
     }
 
     /**
+     * Obter transações filtradas por data
+     */
+    async getFilteredTransactions() {
+        if (!this.filterStartDate && !this.filterEndDate) {
+            return this.transactions;
+        }
+
+        const result = await apiClient.getTransactions(
+            this.filterStartDate,
+            this.filterEndDate
+        );
+
+        if (result.success) {
+            return result.data.data || [];
+        }
+        return this.transactions;
+    }
+
+    /**
+     * Manipular mudança de filtro de tempo
+     */
+    handleFilterChange(filterType) {
+        this.currentFilter = filterType;
+
+        // Atualizar botões
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.filter === filterType) {
+                btn.classList.add('active');
+            }
+        });
+
+        // Mostrar/esconder inputs customizados
+        const customRange = document.getElementById('custom-date-range');
+        if (filterType === 'custom') {
+            customRange.style.display = 'grid';
+        } else {
+            customRange.style.display = 'none';
+            this.applyPresetFilter(filterType);
+        }
+    }
+
+    /**
+     * Aplicar filtro pré-definido
+     */
+    applyPresetFilter(filterType) {
+        const now = new Date();
+        let startDate = null;
+        let endDate = null;
+
+        switch (filterType) {
+            case 'today':
+                startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+                break;
+            case 'week':
+                const weekStart = new Date(now);
+                weekStart.setDate(now.getDate() - now.getDay());
+                startDate = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate());
+                endDate = now;
+                break;
+            case 'month':
+                startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+                endDate = now;
+                break;
+            case 'all':
+            default:
+                startDate = null;
+                endDate = null;
+                break;
+        }
+
+        this.filterStartDate = startDate ? startDate.toISOString().split('T')[0] : null;
+        this.filterEndDate = endDate ? endDate.toISOString().split('T')[0] : null;
+
+        this.renderDashboard();
+    }
+
+    /**
+     * Aplicar filtro customizado
+     */
+    applyCustomFilter() {
+        const startDateInput = document.getElementById('filter-start-date').value;
+        const endDateInput = document.getElementById('filter-end-date').value;
+
+        if (!startDateInput && !endDateInput) {
+            this.showToast('Por favor, selecione pelo menos uma data', 'warning');
+            return;
+        }
+
+        this.filterStartDate = startDateInput || null;
+        this.filterEndDate = endDateInput || null;
+
+        this.renderDashboard();
+    }
+
+    /**
      * Renderizar dashboard
      */
     async renderDashboard() {
-        // Atualizar saldo
-        const balanceResult = await apiClient.getBalance();
+        // Obter transações filtradas
+        const filteredTxs = await this.getFilteredTransactions();
+
+        // Atualizar saldo com filtro
+        const balanceResult = await apiClient.getBalance(
+            this.filterStartDate,
+            this.filterEndDate
+        );
         if (balanceResult.success) {
             const balance = parseFloat(balanceResult.data.data.balance);
             document.getElementById('balance-value').textContent = this.formatCurrency(balance);
         }
 
         // Atualizar contagem de transações
-        document.getElementById('transaction-count').textContent = this.transactions.length;
+        document.getElementById('transaction-count').textContent = filteredTxs.length;
 
         // Calcular receitas e despesas
         let totalIncome = 0;
         let totalExpense = 0;
 
-        this.transactions.forEach(tx => {
+        filteredTxs.forEach(tx => {
             const amount = parseFloat(tx.amount.amount);
             if (tx.type === 'income') {
                 totalIncome += amount;
@@ -136,7 +248,7 @@ class FinanceApp {
         document.getElementById('total-expense').textContent = this.formatCurrency(totalExpense);
 
         // Renderizar transações recentes (últimas 5)
-        const recentTxs = this.transactions.slice(-5).reverse();
+        const recentTxs = filteredTxs.slice(-5).reverse();
         const recentContainer = document.getElementById('recent-transactions');
 
         if (recentTxs.length === 0) {
@@ -238,7 +350,7 @@ class FinanceApp {
             return;
         }
 
-        const reportData = result.data.data || {};
+        const reportData = result.data.data.data || {};
         const entries = Object.entries(reportData);
 
         if (entries.length === 0) {
