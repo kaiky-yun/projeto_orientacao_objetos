@@ -1,6 +1,6 @@
 /**
  * Aplicação Frontend do Controlador Financeiro
- * Gerencia a interface e a comunicação com a API
+ * Gerencia a interface e a comunicação com o backend Flask
  */
 
 class FinanceApp {
@@ -130,7 +130,7 @@ class FinanceApp {
         if (result.success) {
             return result.data.data || [];
         }
-        return this.transactions;
+        return this.transactions; // Retorna todas as transações se houver erro na API
     }
 
     /**
@@ -215,7 +215,7 @@ class FinanceApp {
      * Renderizar dashboard
      */
     async renderDashboard() {
-        // Obter transações filtradas
+        // Obter transações filtradas para exibição no dashboard
         const filteredTxs = await this.getFilteredTransactions();
 
         // Atualizar saldo com filtro
@@ -298,20 +298,17 @@ class FinanceApp {
         const formattedTime = date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
         const typeLabel = tx.type === 'income' ? 'Receita' : 'Despesa';
-        const amountDisplay = tx.type === 'income' 
-            ? `+ ${this.formatCurrency(amount)}`
-            : `- ${this.formatCurrency(amount)}`;
 
         return `
             <div class="transaction-item ${tx.type}">
                 <div class="transaction-info">
                     <div class="transaction-header">
                         <span class="transaction-description">${this.escapeHtml(tx.description)}</span>
-                        <span class="transaction-amount">${amountDisplay}</span>
+                        <span class="transaction-amount ${tx.type}">${tx.type === 'income' ? '+' : '-'} ${this.formatCurrency(amount)}</span>
                     </div>
                     <div class="transaction-meta">
                         <span class="transaction-category">${this.escapeHtml(tx.category.name)}</span>
-                        <span class="transaction-date">${formattedDate} ${formattedTime}</span>
+                        <span>${formattedDate} às ${formattedTime}</span>
                     </div>
                 </div>
                 <div class="transaction-actions">
@@ -322,19 +319,48 @@ class FinanceApp {
     }
 
     /**
-     * Trocar tipo de relatório
+     * Manipular adição de transação
      */
-    switchReport(type) {
-        this.currentReportType = type;
+    async handleAddTransaction(event) {
+        event.preventDefault();
+        const form = event.target;
+        const formData = new FormData(form);
+
+        const data = {
+            type: formData.get('type'),
+            amount: parseFloat(formData.get('amount')),
+            description: formData.get('description'),
+            category: formData.get('category'),
+            occurred_at: formData.get('occurred_at') ? new Date(formData.get('occurred_at')).toISOString() : null,
+        };
+
+        const result = await apiClient.createTransaction(data);
+
+        if (result.success) {
+            this.showToast('Transação adicionada com sucesso!', 'success');
+            form.reset();
+            await this.loadInitialData(); // Recarregar todas as transações
+            this.renderDashboard();
+            this.renderTransactionsList();
+        } else {
+            this.showToast(`Erro: ${result.error}`, 'error');
+        }
+    }
+
+    /**
+     * Trocar de tipo de relatório
+     */
+    switchReport(reportType) {
+        this.currentReportType = reportType;
 
         // Atualizar botões
-        document.getElementById('report-by-category').classList.toggle('active', type === 'category');
-        document.getElementById('report-by-month').classList.toggle('active', type === 'month');
+        document.getElementById('report-by-category').classList.toggle('active', reportType === 'category');
+        document.getElementById('report-by-month').classList.toggle('active', reportType === 'month');
 
         // Atualizar título
-        const title = type === 'category' ? 'Relatório por Categoria' : 'Relatório por Mês';
-        document.getElementById('report-title').textContent = title;
+        document.getElementById('report-title').textContent = `Relatório por ${reportType === 'category' ? 'Categoria' : 'Mês'}`;
 
+        // Renderizar relatório
         this.renderReport();
     }
 
@@ -342,82 +368,29 @@ class FinanceApp {
      * Renderizar relatório
      */
     async renderReport() {
-        const result = await apiClient.getReport(this.currentReportType);
+        const result = await apiClient.getReport(this.currentReportType, this.filterStartDate, this.filterEndDate);
         const container = document.getElementById('report-content');
 
-        if (!result.success) {
-            container.innerHTML = `<p class="empty-state">Erro ao carregar relatório: ${result.error}</p>`;
-            return;
-        }
-
-        const reportData = result.data.data.data || {};
-        const entries = Object.entries(reportData);
-
-        if (entries.length === 0) {
-            container.innerHTML = '<p class="empty-state">Nenhum dado para exibir</p>';
-            return;
-        }
-
-        container.innerHTML = entries.map(([label, value]) => {
-            const amount = parseFloat(value);
-            const isPositive = amount >= 0;
-            const displayValue = isPositive 
-                ? `+ ${this.formatCurrency(amount)}`
-                : `- ${this.formatCurrency(Math.abs(amount))}`;
-
-            return `
-                <div class="report-item">
-                    <span class="report-item-label">${this.escapeHtml(label)}</span>
-                    <span class="report-item-value" style="color: ${isPositive ? '#10B981' : '#EF4444'}">${displayValue}</span>
-                </div>
-            `;
-        }).join('');
-    }
-
-    /**
-     * Manipular adição de transação
-     */
-    async handleAddTransaction(e) {
-        e.preventDefault();
-
-        const form = e.target;
-        const formData = new FormData(form);
-
-        const transaction = {
-            type: formData.get('type'),
-            amount: parseFloat(formData.get('amount')),
-            description: formData.get('description'),
-            category: formData.get('category'),
-        };
-
-        // Adicionar data se fornecida
-        const dateStr = formData.get('occurred_at');
-        if (dateStr) {
-            transaction.occurred_at = new Date(dateStr).toISOString();
-        }
-
-        // Validar
-        if (!transaction.type || !transaction.amount || !transaction.description || !transaction.category) {
-            this.showToast('Por favor, preencha todos os campos obrigatórios', 'warning');
-            return;
-        }
-
-        if (transaction.amount <= 0) {
-            this.showToast('O valor deve ser maior que zero', 'warning');
-            return;
-        }
-
-        // Enviar para API
-        const result = await apiClient.createTransaction(transaction);
-
         if (result.success) {
-            this.showToast('Transação adicionada com sucesso!', 'success');
-            form.reset();
-            await this.loadInitialData();
-            this.renderDashboard();
-            this.renderTransactionsList();
-            this.renderReport();
+            const data = result.data.data; // Agora 'data' é um objeto
+            const keys = Object.keys(data);
+
+            if (keys.length === 0) {
+                container.innerHTML = '<p class="empty-state">Nenhum dado para exibir</p>';
+            } else {
+                // Mapear o objeto para um array de elementos HTML
+                container.innerHTML = keys.map(key => {
+                    const amount = parseFloat(data[key]);
+                    return `
+                        <div class="report-item">
+                            <span class="report-item-label">${this.escapeHtml(key)}</span>
+                            <span class="transaction-amount ${amount >= 0 ? 'income' : 'expense'}">${this.formatCurrency(amount)}</span>
+                        </div>
+                    `;
+                }).join('');
+            }
         } else {
+            container.innerHTML = '<p class="empty-state">Erro ao carregar relatório</p>';
             this.showToast(`Erro: ${result.error}`, 'error');
         }
     }
@@ -480,4 +453,3 @@ class FinanceApp {
 document.addEventListener('DOMContentLoaded', () => {
     new FinanceApp();
 });
-

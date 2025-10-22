@@ -179,8 +179,16 @@ html, body {
     color: var(--text-primary);
 }
 
-/* ==================== CARDS ====================*/
+/* Estilo para valores de receita e despesa nos relatórios */
+.report-item-value.income {
+    color: var(--success-color);
+}
 
+.report-item-value.expense {
+    color: var(--danger-color);
+}
+
+/* ==================== UTILIDADES ====================*/
 .section-card {
     background-color: var(--bg-primary);
     border-radius: var(--radius-lg);
@@ -498,16 +506,11 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--spacing-lg);
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-primary);
+    padding: var(--spacing-md) var(--spacing-lg);
     border-radius: var(--radius-md);
-    border-left: 4px solid var(--primary-color);
-    transition: var(--transition);
-}
-
-.transaction-item:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateX(4px);
+    box-shadow: var(--shadow-sm);
+    border-left: 4px solid var(--border-color);
 }
 
 .transaction-item.income {
@@ -519,60 +522,45 @@ html, body {
 }
 
 .transaction-info {
-    flex: 1;
+    flex-grow: 1;
 }
 
 .transaction-header {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
     margin-bottom: var(--spacing-sm);
 }
 
 .transaction-description {
     font-weight: 600;
     color: var(--text-primary);
+    font-size: 1rem;
 }
 
 .transaction-amount {
     font-weight: 700;
     font-size: 1.1rem;
+    color: var(--text-primary);
 }
 
-.transaction-item.income .transaction-amount {
+.transaction-amount.income {
     color: var(--success-color);
 }
 
-.transaction-item.expense .transaction-amount {
+.transaction-amount.expense {
     color: var(--danger-color);
 }
 
 .transaction-meta {
-    display: flex;
-    gap: var(--spacing-lg);
     font-size: 0.85rem;
     color: var(--text-secondary);
-}
-
-.transaction-category {
-    background-color: var(--primary-light);
-    color: white;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border-radius: var(--radius-sm);
-    font-size: 0.8rem;
-    font-weight: 600;
+    display: flex;
+    gap: var(--spacing-md);
 }
 
 .transaction-actions {
-    display: flex;
-    gap: var(--spacing-sm);
-}
-
-.empty-state {
-    text-align: center;
-    padding: var(--spacing-2xl) var(--spacing-lg);
-    color: var(--text-secondary);
-    font-style: italic;
+    margin-left: var(--spacing-lg);
 }
 
 /* ==================== REPORTS ====================*/
@@ -580,7 +568,7 @@ html, body {
 .report-options {
     display: flex;
     gap: var(--spacing-md);
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
 }
 
 .report-content {
@@ -593,44 +581,53 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--spacing-lg);
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-primary);
+    padding: var(--spacing-md) var(--spacing-lg);
     border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
     border-left: 4px solid var(--primary-color);
 }
 
 .report-item-label {
     font-weight: 600;
     color: var(--text-primary);
+    font-size: 1rem;
 }
 
 .report-item-value {
     font-weight: 700;
-    font-size: 1.25rem;
-    color: var(--primary-color);
+    font-size: 1.1rem;
 }
+
 
 /* ==================== TOAST NOTIFICATIONS ====================*/
 
 .toast {
-    position: fixed;
-    bottom: var(--spacing-lg);
-    right: var(--spacing-lg);
-    padding: var(--spacing-lg);
-    background-color: var(--success-color);
-    color: white;
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
     border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
+    padding: var(--spacing-md);
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 30px;
+    font-size: 0.9rem;
     opacity: 0;
-    transform: translateY(100px);
-    transition: var(--transition);
-    max-width: 400px;
-    z-index: 1000;
+    transition: opacity 0.3s, bottom 0.3s;
 }
 
 .toast.show {
+    visibility: visible;
     opacity: 1;
-    transform: translateY(0);
+    bottom: 50px;
+}
+
+.toast.success {
+    background-color: var(--success-color);
 }
 
 .toast.error {
@@ -641,113 +638,82 @@ html, body {
     background-color: var(--warning-color);
 }
 
-.toast.info {
-    background-color: var(--info-color);
+/* ==================== ESTADOS VAZIOS ====================*/
+
+.empty-state {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: var(--spacing-xl);
+    background-color: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    margin-top: var(--spacing-xl);
+    font-size: 1.1rem;
 }
 
-/* ==================== RESPONSIVE ====================*/
+/* ==================== RESPONSIVIDADE ====================*/
 
 @media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: var(--spacing-lg);
+    }
+
+    .header-content h1 {
+        font-size: 1.5rem;
+    }
+
+    .api-status {
+        margin-top: var(--spacing-md);
+    }
+
     .main-content {
         flex-direction: column;
     }
 
     .sidebar {
         width: 100%;
-        padding: var(--spacing-lg);
         border-right: none;
         border-bottom: 1px solid var(--border-color);
+        padding: var(--spacing-md);
     }
 
     .nav-menu {
         flex-direction: row;
-        gap: var(--spacing-md);
         overflow-x: auto;
+        padding-bottom: var(--spacing-sm);
     }
 
     .nav-btn {
         white-space: nowrap;
+        padding: var(--spacing-sm) var(--spacing-md);
     }
 
     .content {
         padding: var(--spacing-lg);
-    }
-
-    .header {
-        flex-direction: column;
-        gap: var(--spacing-lg);
-        text-align: center;
-    }
-
-    .header-content h1 {
-        font-size: 1.5rem;
-    }
-
-    .form-row {
-        grid-template-columns: 1fr;
     }
 
     .balance-card {
         grid-template-columns: 1fr;
     }
 
-    .transaction-item {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-preset-buttons {
         flex-direction: column;
-        align-items: flex-start;
-        gap: var(--spacing-md);
     }
 
-    .transaction-header {
-        width: 100%;
-    }
-
-    .transaction-actions {
-        width: 100%;
-    }
-
-    .report-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--spacing-md);
-    }
-}
-
-@media (max-width: 480px) {
-    .header {
-        padding: var(--spacing-lg);
-    }
-
-    .header-content h1 {
-        font-size: 1.25rem;
-    }
-
-    .content {
-        padding: var(--spacing-md);
-    }
-
-    .section-card {
-        padding: var(--spacing-lg);
-    }
-
-    .nav-menu {
-        gap: var(--spacing-sm);
-    }
-
-    .nav-btn {
-        padding: var(--spacing-sm) var(--spacing-md);
-        font-size: 0.9rem;
-    }
-
-    .balance-amount {
-        font-size: 1.5rem;
-    }
-
-    .stat-value {
-        font-size: 1.25rem;
+    .custom-date-range {
+        grid-template-columns: 1fr;
     }
 
     .transactions-filter {
         grid-template-columns: 1fr;
     }
 }
-
