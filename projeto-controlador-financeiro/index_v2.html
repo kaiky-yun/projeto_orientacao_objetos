@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controlador Financeiro v2</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Garantir que login apareça primeiro */
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Estilos adicionais para login */
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .form-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            border-bottom: 2px solid #ddd;
+        }
+        .form-tab.active {
+            border-bottom-color: #4CAF50;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Estilos para botões de período */
+        .period-btn {
+            padding: 10px 20px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+        
+        .period-btn:hover {
+            border-color: #5b5fc7;
+            color: #5b5fc7;
+            background: #f5f5ff;
+        }
+        
+        .period-btn.active {
+            background: #5b5fc7;
+            color: white;
+            border-color: #5b5fc7;
+        }
+        
+        /* Garantir visibilidade correta ao carregar */
+        #login-screen {
+            display: block !important;
+        }
+        
+        /* Estilos para botões de ação */
+        .btn-primary {
+            padding: 12px 24px;
+            background: #5b5fc7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn-primary:hover {
+            background: #4a4fb0;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(91, 95, 199, 0.3);
+        }
+        
+        .btn-delete {
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        
+        .btn-delete:hover {
+            background: #d32f2f;
+        }
+        
+        #main-app {
+            display: none !important;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logout-btn {
+            padding: 5px 15px;
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .investment-card {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #2196F3;
+        }
+        .simulation-form {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .projection-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .projection-table th,
+        .projection-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .projection-table th {
+            background: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen (visível por padrão) -->
+    <div id="login-screen" class="login-container" style="display: block;">
+        <h2>💰 Controlador Financeiro</h2>
+        
+        <div class="form-tabs">
+            <div class="form-tab active" data-tab="login">Login</div>
+            <div class="form-tab" data-tab="register">Cadastro</div>
+        </div>
+        
+        <!-- Login Form -->
+        <form id="login-form" class="auth-form">
+            <div class="form-group">
+                <label for="login-username">Usuário ou Email</label>
+                <input type="text" id="login-username" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Senha</label>
+                <input type="password" id="login-password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Entrar</button>
+        </form>
+        
+        <!-- Register Form -->
+        <form id="register-form" class="auth-form hidden">
+            <div class="form-group">
+                <label for="register-username">Usuário</label>
+                <input type="text" id="register-username" required>
+            </div>
+            <div class="form-group">
+                <label for="register-email">Email</label>
+                <input type="email" id="register-email" required>
+            </div>
+            <div class="form-group">
+                <label for="register-password">Senha (mínimo 6 caracteres)</label>
+                <input type="password" id="register-password" required minlength="6">
+            </div>
+            <button type="submit" class="btn btn-primary">Cadastrar</button>
+        </form>
+    </div>
+
+    <!-- Main App (escondido por padrão) -->
+    <div id="main-app" class="container" style="display: none;">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>💰 Controlador Financeiro v2</h1>
+                <p class="subtitle">Gerencie suas receitas, despesas e investimentos</p>
+            </div>
+            <div class="user-info">
+                <span id="user-name">Usuário</span>
+                <button class="logout-btn" onclick="logout()">Sair</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <nav class="nav-menu">
+                    <button class="nav-btn active" data-section="dashboard">📊 Dashboard</button>
+                    <button class="nav-btn" data-section="transactions">📋 Transações</button>
+                    <button class="nav-btn" data-section="reports">📈 Relatórios</button>
+                    <button class="nav-btn" data-section="investments">💼 Investimentos</button>
+                    <button class="nav-btn" data-section="simulations">🔮 Simulações</button>
+                </nav>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="content">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="section active">
+                    <h2>Dashboard</h2>
+                    
+                    <!-- Filtro de Período -->
+                    <div class="section-card" style="margin-bottom: 20px;">
+                        <h3>Filtro de Período</h3>
+                        <div class="period-filter-buttons" style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+                            <button type="button" class="period-btn active" data-period="all">Tudo</button>
+                            <button type="button" class="period-btn" data-period="today">Hoje</button>
+                            <button type="button" class="period-btn" data-period="week">Última Semana</button>
+                            <button type="button" class="period-btn" data-period="month">Último Mês</button>
+                            <button type="button" class="period-btn" data-period="custom">Customizado</button>
+                        </div>
+                        <div id="custom-date-range" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="dashboard-start-date">Data Inicial</label>
+                                    <input type="date" id="dashboard-start-date">
+                                </div>
+                                <div class="form-group">
+                                    <label for="dashboard-end-date">Data Final</label>
+                                    <input type="date" id="dashboard-end-date">
+                                </div>
+                            </div>
+                            <button type="button" id="apply-custom-filter" class="btn btn-primary" style="width: 100%;">Aplicar Filtro</button>
+                        </div>
+                    </div>
+                    
+                    <div class="balance-card">
+                        <div class="balance-item">
+                            <span class="balance-label">Saldo Total</span>
+                            <span id="balance-value" class="balance-amount">R$ 0,00</span>
+                        </div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card income">
+                            <h3>Receitas</h3>
+                            <p id="total-income" class="stat-value">R$ 0,00</p>
+                        </div>
+                        <div class="stat-card expense">
+                            <h3>Despesas</h3>
+                            <p id="total-expense" class="stat-value">R$ 0,00</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Transactions Section -->
+                <section id="transactions" class="section">
+                    <h2>Gerenciar Transações</h2>
+                    <div class="section-card form-card">
+                        <h3>Adicionar Nova Transação</h3>
+                        <form id="transaction-form" class="transaction-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="tx-type">Tipo *</label>
+                                    <select id="tx-type" required>
+                                        <option value="">Selecione...</option>
+                                        <option value="income">Receita</option>
+                                        <option value="expense">Despesa</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tx-amount">Valor *</label>
+                                    <input type="number" id="tx-amount" step="0.01" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="tx-category">Categoria *</label>
+                                    <input type="text" id="tx-category" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tx-date">Data</label>
+                                    <input type="datetime-local" id="tx-date">
+                                </div>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="tx-description">Descrição *</label>
+                                <textarea id="tx-description" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Adicionar Transação</button>
+                        </form>
+                    </div>
+                    <div class="section-card">
+                        <h3>Todas as Transações</h3>
+                        <div id="all-transactions" class="transactions-list"></div>
+                    </div>
+                </section>
+
+                <!-- Reports Section -->
+                <section id="reports" class="section">
+                    <h2>Relatórios Avançados</h2>
+                    <div class="section-card">
+                        <h3>Relatório Mensal por Categoria</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="report-month">Selecione o Mês</label>
+                                <select id="report-month"></select>
+                            </div>
+                            <button class="btn btn-primary" onclick="loadMonthlyReport()">Gerar Relatório</button>
+                        </div>
+                        <div id="monthly-report-content"></div>
+                    </div>
+                </section>
+
+                <!-- Investments Section -->
+                <section id="investments" class="section">
+                    <h2>Meus Investimentos</h2>
+                    <div class="section-card">
+                        <h3>Adicionar Investimento</h3>
+                        <form id="investment-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="inv-name">Nome *</label>
+                                    <input type="text" id="inv-name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inv-type">Tipo *</label>
+                                    <select id="inv-type" required>
+                                        <option value="">Selecione...</option>
+                                        <option value="renda_fixa">Renda Fixa</option>
+                                        <option value="renda_variavel">Renda Variável</option>
+                                        <option value="fundo">Fundo</option>
+                                        <option value="criptomoeda">Criptomoeda</option>
+                                        <option value="outro">Outro</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="inv-initial">Valor Inicial *</label>
+                                    <input type="number" id="inv-initial" step="0.01" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inv-rate">Taxa Mensal (%) *</label>
+                                    <input type="number" id="inv-rate" step="0.01" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Adicionar Investimento</button>
+                        </form>
+                    </div>
+                    <div class="section-card">
+                        <h3>Lista de Investimentos</h3>
+                        <div id="investments-list"></div>
+                    </div>
+                </section>
+
+                <!-- Simulations Section -->
+                <section id="simulations" class="section">
+                    <h2>Simulação de Investimentos</h2>
+                    <div class="section-card">
+                        <h3>Simular Aporte Fixo</h3>
+                        <form id="simulation-form" class="simulation-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="sim-initial">Valor Inicial (R$) *</label>
+                                    <input type="number" id="sim-initial" step="0.01" value="2000" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="sim-contribution">Aporte Mensal (R$) *</label>
+                                    <input type="number" id="sim-contribution" step="0.01" value="1000" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="sim-rate">Taxa Mensal (%) *</label>
+                                    <input type="number" id="sim-rate" step="0.01" value="0.8" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="sim-months">Período (meses) *</label>
+                                    <input type="number" id="sim-months" value="36" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Simular</button>
+                        </form>
+                    </div>
+                    <div class="section-card">
+                        <h3>Resultado da Simulação</h3>
+                        <div id="simulation-result"></div>
+                    </div>
+                </section>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Scripts -->
+    <script src="format_utils.js"></script>
+    <script src="price_functions.js"></script>
+    <script src="app_v2.js"></script>
+</body>
+</html>
+

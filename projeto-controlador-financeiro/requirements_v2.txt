@@ -1,0 +1,18 @@
+# Dependências do Controlador Financeiro v2
+
+# Core
+pytest>=8.0.0
+pytest-benchmark>=4.0.0
+
+# API REST
+flask>=3.0.0
+flask-cors>=6.0.0
+flask-jwt-extended>=4.7.0
+
+# Segurança
+bcrypt>=5.0.0
+
+# Já instaladas no ambiente
+# openpyxl (para ler planilhas Excel)
+# pandas (para análise de dados)
+

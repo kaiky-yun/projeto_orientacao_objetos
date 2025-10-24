@@ -9,6 +9,8 @@ class ITransactionRepository(ABC):
     @abstractmethod
     def list(self) -> list[Transaction]: ...
     @abstractmethod
+    def list_by_user(self, user_id: str) -> list[Transaction]: ...
+    @abstractmethod
     def by_id(self, id: str) -> Optional[Transaction]: ...
     @abstractmethod
     def add(self, tx: Transaction) -> None: ...
@@ -25,6 +27,11 @@ class JSONTransactionRepository(ITransactionRepository):
     def list(self) -> list[Transaction]:
         raw = self.storage.get_all()
         return [Transaction.from_dict(d) for d in raw]
+    
+    def list_by_user(self, user_id: str) -> list[Transaction]:
+        """Lista transações de um usuário específico."""
+        all_transactions = self.list()
+        return [tx for tx in all_transactions if tx.user_id == user_id]
 
     def by_id(self, id: str) -> Optional[Transaction]:
         return next((tx for tx in self.list() if tx.id == id), None)

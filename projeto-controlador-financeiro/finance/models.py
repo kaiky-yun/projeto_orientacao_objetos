@@ -64,6 +64,7 @@ class Transaction:
     amount: Money
     description: str
     category: Category
+    user_id: str = "default"  # ID do usuário proprietário
     occurred_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     id: str = field(default_factory=lambda: uuid.uuid4().hex)
 
@@ -86,6 +87,7 @@ class Transaction:
             "amount": self.amount.to_dict(),
             "description": self.description,
             "category": {"name": self.category.name},
+            "user_id": self.user_id,
             "occurred_at": self.occurred_at.isoformat(),
         }
 
@@ -97,5 +99,6 @@ class Transaction:
             amount=Money.from_dict(d["amount"]),
             description=d["description"],
             category=Category(d["category"]["name"]),
+            user_id=d.get("user_id", "default"),  # Compatibilidade com dados antigos
             occurred_at=datetime.fromisoformat(d["occurred_at"]),
         )
