@@ -1,0 +1,60 @@
+Iniciando frontend na porta 8010...
+192.168.0.2 - - [25/Oct/2025 02:29:43] "GET /index_v2.html HTTP/1.1" 200 -
+192.168.0.2 - - [25/Oct/2025 02:29:43] "GET /styles.css HTTP/1.1" 304 -
+192.168.0.2 - - [25/Oct/2025 02:29:43] "GET /format_utils.js HTTP/1.1" 304 -
+192.168.0.2 - - [25/Oct/2025 02:29:43] "GET /price_functions.js HTTP/1.1" 304 -
+192.168.0.2 - - [25/Oct/2025 02:29:43] "GET /app_v2.js HTTP/1.1" 304 -
+192.168.0.73 - - [25/Oct/2025 02:45:51] "GET /index_v2.html HTTP/1.1" 304 -
+192.168.0.73 - - [25/Oct/2025 02:45:51] "GET /styles.css HTTP/1.1" 304 -
+192.168.0.73 - - [25/Oct/2025 02:45:51] "GET /format_utils.js HTTP/1.1" 304 -
+192.168.0.73 - - [25/Oct/2025 02:45:51] "GET /price_functions.js HTTP/1.1" 304 -
+192.168.0.73 - - [25/Oct/2025 02:45:51] "GET /app_v2.js HTTP/1.1" 304 -
+192.168.0.73 - - [25/Oct/2025 02:49:13] code 404, message File not found
+192.168.0.73 - - [25/Oct/2025 02:49:13] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 -
+192.168.0.73 - - [25/Oct/2025 02:49:13] "GET /index_v2.html HTTP/1.1" 200 -
+192.168.0.73 - - [25/Oct/2025 02:49:13] "GET /index_v2.html HTTP/1.1" 200 -
+192.168.0.73 - - [25/Oct/2025 02:49:13] code 404, message File not found
+192.168.0.73 - - [25/Oct/2025 02:49:13] "GET /apple-touch-icon.png HTTP/1.1" 404 -
+192.168.0.73 - - [25/Oct/2025 02:49:13] code 404, message File not found
+192.168.0.73 - - [25/Oct/2025 02:49:13] "GET /favicon.ico HTTP/1.1" 404 -
+192.168.0.73 - - [25/Oct/2025 02:49:13] code 404, message File not found
+192.168.0.73 - - [25/Oct/2025 02:49:13] "GET /apple-touch-icon-120x120-precomposed.png HTTP/1.1" 404 -
+192.168.0.73 - - [25/Oct/2025 02:49:14] code 404, message File not found
+192.168.0.73 - - [25/Oct/2025 02:49:14] "GET /apple-touch-icon-120x120.png HTTP/1.1" 404 -
+192.168.0.73 - - [25/Oct/2025 02:49:14] code 404, message File not found
+192.168.0.73 - - [25/Oct/2025 02:49:14] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 -
+192.168.0.73 - - [25/Oct/2025 02:49:14] code 404, message File not found
+192.168.0.73 - - [25/Oct/2025 02:49:14] "GET /apple-touch-icon.png HTTP/1.1" 404 -
+192.168.0.73 - - [25/Oct/2025 02:49:14] code 404, message File not found
+192.168.0.73 - - [25/Oct/2025 02:49:14] "GET /favicon.ico HTTP/1.1" 404 -
+192.168.0.73 - - [25/Oct/2025 02:49:14] code 404, message File not found
+192.168.0.73 - - [25/Oct/2025 02:49:14] "GET /apple-touch-icon-120x120-precomposed.png HTTP/1.1" 404 -
+192.168.0.73 - - [25/Oct/2025 02:49:14] code 404, message File not found
+192.168.0.73 - - [25/Oct/2025 02:49:14] "GET /apple-touch-icon-120x120.png HTTP/1.1" 404 -
+192.168.0.73 - - [25/Oct/2025 02:49:14] code 404, message File not found
+192.168.0.73 - - [25/Oct/2025 02:49:14] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 -
+192.168.0.73 - - [25/Oct/2025 02:49:15] code 404, message File not found
+192.168.0.73 - - [25/Oct/2025 02:49:15] "GET /apple-touch-icon.png HTTP/1.1" 404 -
+192.168.0.73 - - [25/Oct/2025 02:49:15] code 404, message File not found
+192.168.0.73 - - [25/Oct/2025 02:49:15] "GET /favicon.ico HTTP/1.1" 404 -
+192.168.0.2 - - [25/Oct/2025 16:20:17] "GET /index_v2.html HTTP/1.1" 200 -
+192.168.0.2 - - [25/Oct/2025 16:20:17] "GET /styles.css HTTP/1.1" 304 -
+192.168.0.2 - - [25/Oct/2025 16:20:17] "GET /format_utils.js HTTP/1.1" 304 -
+192.168.0.2 - - [25/Oct/2025 16:20:17] "GET /price_functions.js HTTP/1.1" 304 -
+192.168.0.2 - - [25/Oct/2025 16:20:17] "GET /app_v2.js HTTP/1.1" 304 -
+192.168.0.2 - - [25/Oct/2025 16:23:42] "GET /index_v2.html HTTP/1.1" 200 -
+192.168.0.73 - - [25/Oct/2025 16:24:12] "GET /index_v2.html HTTP/1.1" 304 -
+192.168.0.73 - - [25/Oct/2025 16:24:12] "GET /styles.css HTTP/1.1" 304 -
+192.168.0.73 - - [25/Oct/2025 16:24:12] "GET /format_utils.js HTTP/1.1" 304 -
+192.168.0.73 - - [25/Oct/2025 16:24:12] "GET /price_functions.js HTTP/1.1" 304 -
+192.168.0.73 - - [25/Oct/2025 16:24:12] "GET /app_v2.js HTTP/1.1" 304 -
+192.168.0.73 - - [25/Oct/2025 16:24:13] code 404, message File not found
+192.168.0.73 - - [25/Oct/2025 16:24:13] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 -
+192.168.0.73 - - [25/Oct/2025 16:24:13] code 404, message File not found
+192.168.0.73 - - [25/Oct/2025 16:24:13] "GET /apple-touch-icon.png HTTP/1.1" 404 -
+192.168.0.73 - - [25/Oct/2025 16:24:13] code 404, message File not found
+192.168.0.73 - - [25/Oct/2025 16:24:13] "GET /favicon.ico HTTP/1.1" 404 -
+192.168.0.2 - - [25/Oct/2025 16:50:17] "GET / HTTP/1.1" 304 -
+192.168.0.2 - - [25/Oct/2025 16:50:17] "GET /api-client.js HTTP/1.1" 304 -
+192.168.0.2 - - [25/Oct/2025 16:50:17] "GET /app.js HTTP/1.1" 304 -
+./start_http.sh: line 5: 42686 Killed                  python3 -m http.server 8010

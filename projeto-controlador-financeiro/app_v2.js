@@ -1,5 +1,5 @@
 // Controlador Financeiro v2 - Frontend com Autenticação
-const API_BASE_URL = 'http://localhost:5010/api';
+const API_BASE_URL = 'http://192.168.0.158:5010/api';
 
 // Estado da aplicação
 let authToken = null;
