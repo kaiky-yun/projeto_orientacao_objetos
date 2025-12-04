@@ -1,0 +1,115 @@
+ * Serving Flask app 'app'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://192.168.0.2:8000
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 113-714-448
+127.0.0.1 - - [04/Dec/2025 01:12:51] "[32mGET / HTTP/1.1[0m" 302 -
+127.0.0.1 - - [04/Dec/2025 01:12:51] "GET /login HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:12:51] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:12:51] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:12:53] "GET /login HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:12:53] "GET /static/css/style.css HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:12:53] "GET /static/js/main.js HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:15:21] "GET /register HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:15:21] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:15:21] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:15:35] "POST /register HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:15:35] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:15:35] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:15:39] "GET /login HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:15:39] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:15:39] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:15:45] "POST /login HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:15:45] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:15:45] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:15:52] "[32mPOST /login HTTP/1.1[0m" 302 -
+127.0.0.1 - - [04/Dec/2025 01:15:52] "GET /transactions/ HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:15:52] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:15:52] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:15:59] "GET /investments/ HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:15:59] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:15:59] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:16:00] "GET /reports/ HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:16:00] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:16:00] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:16:09] "GET /categories/ HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:16:09] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:16:09] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:16:11] "GET /reports/ HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:16:11] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:16:11] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:16:13] "GET /reports/monthly HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:16:13] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:16:13] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:16:16] "GET /reports/ HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:16:16] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:16:16] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:16:18] "GET /reports/by-category HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:16:18] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:16:18] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:16:19] "POST /reports/by-category HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:16:19] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:16:19] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:16:22] "GET /transactions/ HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:16:22] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:16:22] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:16:24] "GET /transactions/create HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:16:24] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:16:24] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:16:51] "[32mPOST /transactions/create HTTP/1.1[0m" 302 -
+127.0.0.1 - - [04/Dec/2025 01:16:51] "GET /transactions/ HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:16:51] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:16:51] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:17:06] "GET /transactions/ HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:17:06] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:17:06] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:17:07] "GET /reports/ HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:17:07] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:17:07] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:17:17] "GET /reports/monthly HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:17:17] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:17:17] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:17:24] "POST /reports/monthly HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:17:24] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:17:24] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:17:30] "GET /reports/ HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:17:30] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:17:30] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:17:32] "GET /reports/by-category HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:17:32] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:17:32] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:17:33] "POST /reports/by-category HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:17:33] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:17:33] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:17:55] "GET /reports/ HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:17:55] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:17:55] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:17:58] "GET /reports/yearly HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:17:58] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:17:58] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:17:59] "POST /reports/yearly HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:17:59] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:17:59] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:18:02] "POST /reports/yearly HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:18:02] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:18:02] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:18:11] "GET /reports/ HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:18:11] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:18:11] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:18:13] "GET /reports/period HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:18:13] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:18:13] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:18:14] "GET /reports/ HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:18:14] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:18:14] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:18:17] "GET /reports/monthly HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:18:17] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:18:17] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:18:19] "GET /reports/ HTTP/1.1" 200 -
+127.0.0.1 - - [04/Dec/2025 01:18:19] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [04/Dec/2025 01:18:19] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
