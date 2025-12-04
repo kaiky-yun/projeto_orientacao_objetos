@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Novo Investimento - Controlador Financeiro{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Novo Investimento</h2>
+</div>
+
+<div class="form-container">
+    <form method="POST" class="investment-form">
+        <div class="form-group">
+            <label for="name">Nome:</label>
+            <input 
+                type="text" 
+                id="name" 
+                name="name" 
+                required 
+                placeholder="Nome do investimento"
+                class="form-control"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="type">Tipo:</label>
+            <select id="type" name="type" required class="form-control">
+                <option value="">Selecione um tipo</option>
+                {% for type_ in investment_types %}
+                <option value="{{ type_ }}">{{ type_.replace('_', ' ').title() }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="initial_amount">Valor Inicial:</label>
+                <input 
+                    type="number" 
+                    id="initial_amount" 
+                    name="initial_amount" 
+                    required 
+                    step="0.01"
+                    min="0.01"
+                    placeholder="0.00"
+                    class="form-control"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="current_amount">Valor Atual:</label>
+                <input 
+                    type="number" 
+                    id="current_amount" 
+                    name="current_amount" 
+                    required 
+                    step="0.01"
+                    min="0"
+                    placeholder="0.00"
+                    class="form-control"
+                >
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="monthly_rate">Taxa Mensal (%):</label>
+            <input 
+                type="number" 
+                id="monthly_rate" 
+                name="monthly_rate" 
+                required 
+                step="0.01"
+                min="0"
+                placeholder="0.00"
+                class="form-control"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="start_date">Data de Início (Opcional):</label>
+            <input 
+                type="datetime-local" 
+                id="start_date" 
+                name="start_date" 
+                class="form-control"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="notes">Notas (Opcional):</label>
+            <textarea 
+                id="notes" 
+                name="notes" 
+                rows="3"
+                placeholder="Anotações sobre o investimento"
+                class="form-control"
+            ></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Criar Investimento</button>
+            <a href="{{ url_for('investment.list_investments') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

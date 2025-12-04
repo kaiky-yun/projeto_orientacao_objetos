@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Categorias - Controlador Financeiro{% endblock %}
+
+{% block content %}
+<div class="header-with-button">
+    <h2>Categorias</h2>
+    <a href="{{ url_for('category.create_category') }}" class="btn btn-primary">+ Nova Categoria</a>
+</div>
+
+<div class="category-section">
+    <h3>Receitas</h3>
+    {% if categories_grouped.income %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories_grouped.income %}
+            <tr>
+                <td>{{ category.name }}</td>
+                <td class="actions">
+                    <a href="{{ url_for('category.edit_category', category_id=category.id) }}" title="Editar">
+                        <span class="icon-edit">✏️</span>
+                    </a>
+                    <form method="POST" action="{{ url_for('category.delete_category', category_id=category.id) }}" class="delete-form" style="display: inline;">
+                        <button type="submit" title="Remover" class="icon-delete">
+                            <span class="icon-delete">🗑️</span>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Nenhuma categoria de receita cadastrada. <a href="{{ url_for('category.create_category') }}">Crie a primeira!</a></p>
+    {% endif %}
+</div>
+
+<div class="category-section">
+    <h3>Despesas</h3>
+    {% if categories_grouped.expense %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories_grouped.expense %}
+            <tr>
+                <td>{{ category.name }}</td>
+                <td class="actions">
+                    <a href="{{ url_for('category.edit_category', category_id=category.id) }}" title="Editar">
+                        <span class="icon-edit">✏️</span>
+                    </a>
+                    <form method="POST" action="{{ url_for('category.delete_category', category_id=category.id) }}" class="delete-form" style="display: inline;">
+                        <button type="submit" title="Remover" class="icon-delete">
+                            <span class="icon-delete">🗑️</span>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Nenhuma categoria de despesa cadastrada. <a href="{{ url_for('category.create_category') }}">Crie a primeira!</a></p>
+    {% endif %}
+</div>
+{% endblock %}

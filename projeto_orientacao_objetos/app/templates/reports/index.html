@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Relatórios - Controlador Financeiro{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Relatórios Financeiros</h2>
+</div>
+
+<!-- Resumo do Mês Atual -->
+<div class="report-section">
+    <h3>Resumo do Mês Atual - {{ current_month_report.month_name }}/{{ current_month_report.year }}</h3>
+    
+    <div class="summary-cards">
+        <div class="summary-card income">
+            <h3>Receitas</h3>
+            <p class="amount">{{ current_month_report.income_total }}</p>
+        </div>
+        <div class="summary-card expense">
+            <h3>Despesas</h3>
+            <p class="amount">{{ current_month_report.expense_total }}</p>
+        </div>
+        <div class="summary-card balance">
+            <h3>Saldo</h3>
+            <p class="amount {% if current_month_report.balance.amount >= 0 %}positive{% else %}negative{% endif %}">
+                {{ current_month_report.balance }}
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Categorias Principais -->
+<div class="report-section">
+    <h3>Principais Categorias</h3>
+    
+    {% if top_categories %}
+    <div class="categories-grid">
+	        {% for category in top_categories %}
+	        <div class="category-card category-{{ category.type }}">
+	            <h4>{{ category.category }}</h4>
+	            <p class="amount">{{ category.total }}</p>
+	
+	        </div>
+	        {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty-message">Nenhuma categoria registrada</p>
+    {% endif %}
+</div>
+
+<!-- Resumo Anual -->
+<div class="report-section">
+    <h3>Resumo Anual - {{ yearly_summary.year }}</h3>
+    
+    <div class="summary-cards">
+        <div class="summary-card income">
+            <h3>Receitas Totais</h3>
+            <p class="amount">{{ yearly_summary.income_total }}</p>
+        </div>
+        <div class="summary-card expense">
+            <h3>Despesas Totais</h3>
+            <p class="amount">{{ yearly_summary.expense_total }}</p>
+        </div>
+        <div class="summary-card balance">
+            <h3>Saldo Anual</h3>
+            <p class="amount {% if yearly_summary.balance.amount >= 0 %}positive{% else %}negative{% endif %}">
+                {{ yearly_summary.balance }}
+            </p>
+        </div>
+    </div>
+    
+    {% if yearly_summary.monthly_data %}
+    <div class="monthly-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Mês</th>
+                    <th>Receitas</th>
+                    <th>Despesas</th>
+                    <th>Saldo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for month in yearly_summary.monthly_data %}
+                <tr>
+                    <td>{{ month.month_name }}</td>
+                    <td class="amount income">{{ month.income }}</td>
+                    <td class="amount expense">{{ month.expense }}</td>
+                    <td class="amount {% if month.balance.amount >= 0 %}positive{% else %}negative{% endif %}">
+                        {{ month.balance }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Links para Relatórios Detalhados -->
+<div class="report-section">
+    <h3>Relatórios Detalhados</h3>
+    
+    <div class="report-links">
+        <a href="{{ url_for('report.by_category') }}" class="report-link">
+            <span class="icon">📊</span>
+            <span class="title">Por Categoria</span>
+            <span class="desc">Análise por categoria com filtros</span>
+        </a>
+        
+        <a href="{{ url_for('report.monthly') }}" class="report-link">
+            <span class="icon">📅</span>
+            <span class="title">Mensal</span>
+            <span class="desc">Relatório de um mês específico</span>
+        </a>
+        
+        <a href="{{ url_for('report.period') }}" class="report-link">
+            <span class="icon">📈</span>
+            <span class="title">Período Personalizado</span>
+            <span class="desc">Análise de um período customizado</span>
+        </a>
+        
+        <a href="{{ url_for('report.yearly') }}" class="report-link">
+            <span class="icon">📋</span>
+            <span class="title">Anual</span>
+            <span class="desc">Resumo completo do ano</span>
+        </a>
+    </div>
+</div>
+{% endblock %}

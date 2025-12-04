@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Tendência de Categoria - Controlador Financeiro{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Tendência de Categoria: {{ category_name }}</h2>
+    <a href="{{ url_for('report.index') }}" class="btn btn-secondary">Voltar aos Relatórios</a>
+</div>
+
+<div class="report-filters">
+    <form method="POST" class="filter-form">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="months">Número de Meses:</label>
+                <select id="months" name="months" class="form-control">
+                    <option value="3" {% if months == 3 %}selected{% endif %}>Últimos 3 meses</option>
+                    <option value="6" {% if months == 6 %}selected{% endif %}>Últimos 6 meses</option>
+                    <option value="12" {% if months == 12 %}selected{% endif %}>Últimos 12 meses</option>
+                    <option value="24" {% if months == 24 %}selected{% endif %}>Últimos 24 meses</option>
+                    <option value="60" {% if months == 60 %}selected{% endif %}>Últimos 5 anos</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Atualizar Gráfico</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% if trend_data %}
+<div class="report-results">
+    <h3>Evolução da Categoria: {{ category_name }}</h3>
+    
+    <!-- Gráfico de Linha Simples -->
+    <div class="chart-container">
+        <div class="line-chart">
+            <table class="trend-table">
+                <thead>
+                    <tr>
+                        <th>Período</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in trend_data %}
+                    <tr>
+                        <td class="period">{{ item.formatted_month }}</td>
+                        <td class="amount">{{ item.total }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Estatísticas -->
+    {% if trend_data %}
+    <div class="statistics-section">
+        <h4>Estatísticas</h4>
+        
+        {% set total_amount = trend_data | map(attribute='total') | map(attribute='amount') | sum %}
+        {% set avg_amount = total_amount / trend_data | length %}
+        {% set max_item = trend_data | max(attribute='total') %}
+        {% set min_item = trend_data | min(attribute='total') %}
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h5>Total Período</h5>
+                <p class="stat-value">{{ total_amount | round(2) }}</p>
+            </div>
+            <div class="stat-card">
+                <h5>Média Mensal</h5>
+                <p class="stat-value">{{ avg_amount | round(2) }}</p>
+            </div>
+            <div class="stat-card">
+                <h5>Maior Valor</h5>
+                <p class="stat-value">{{ max_item.total }}</p>
+                <p class="stat-period">{{ max_item.formatted_month }}</p>
+            </div>
+            <div class="stat-card">
+                <h5>Menor Valor</h5>
+                <p class="stat-value">{{ min_item.total }}</p>
+                <p class="stat-period">{{ min_item.formatted_month }}</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p>Nenhuma transação encontrada para a categoria "{{ category_name }}"</p>
+    <a href="{{ url_for('report.index') }}" class="btn btn-primary">Voltar aos Relatórios</a>
+</div>
+{% endif %}
+{% endblock %}

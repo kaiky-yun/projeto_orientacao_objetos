@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Nova Transação - Controlador Financeiro{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Nova Transação</h2>
+</div>
+
+<div class="form-container">
+    <form method="POST" class="transaction-form">
+        <div class="form-group">
+            <label for="type">Tipo:</label>
+            <select id="type" name="type" required class="form-control">
+                <option value="">Selecione um tipo</option>
+                <option value="income">Receita</option>
+                <option value="expense">Despesa</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="amount">Valor:</label>
+            <input 
+                type="number" 
+                id="amount" 
+                name="amount" 
+                required 
+                step="0.01"
+                min="0.01"
+                placeholder="0.00"
+                class="form-control"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="description">Descrição:</label>
+            <input 
+                type="text" 
+                id="description" 
+                name="description" 
+                required 
+                placeholder="Descrição da transação"
+                class="form-control"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="category">Categoria:</label>
+            <select id="category" name="category" required class="form-control">
+                <option value="">Selecione uma categoria</option>
+                {% for cat in categories.income %}
+                <option value="{{ cat.id }}" data-type="income">{{ cat.name }}</option>
+                {% endfor %}
+                {% for cat in categories.expense %}
+                <option value="{{ cat.id }}" data-type="expense">{{ cat.name }}</option>
+                {% endfor %}
+            </select>
+            <small class="help-text">
+                <a href="{{ url_for('category.list_categories') }}" target="_blank">Gerenciar categorias</a>
+            </small>
+        </div>
+
+        <div class="form-group">
+            <label for="occurred_at">Data (Opcional):</label>
+            <input 
+                type="datetime-local" 
+                id="occurred_at" 
+                name="occurred_at" 
+                class="form-control"
+            >
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Criar Transação</button>
+            <a href="{{ url_for('transaction.list_transactions') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

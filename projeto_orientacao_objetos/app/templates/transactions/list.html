@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Transações - Controlador Financeiro{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Transações</h2>
+    <a href="{{ url_for('transaction.create_transaction') }}" class="btn btn-primary">+ Nova Transação</a>
+</div>
+
+<div class="summary-cards">
+    <div class="summary-card balance">
+        <h3>Saldo</h3>
+        <p class="amount">{{ balance }}</p>
+    </div>
+    <div class="summary-card income">
+        <h3>Receitas</h3>
+        <p class="amount">{{ income_total }}</p>
+    </div>
+    <div class="summary-card expense">
+        <h3>Despesas</h3>
+        <p class="amount">{{ expense_total }}</p>
+    </div>
+</div>
+
+{% if transactions %}
+<div class="transactions-table">
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Tipo</th>
+                <th>Descrição</th>
+                <th>Categoria</th>
+                <th>Valor</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tx in transactions %}
+            <tr class="transaction-row transaction-{{ tx.type }}">
+                <td class="date">{{ tx.occurred_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                <td class="type">
+                    <span class="badge badge-{{ tx.type }}">
+                        {% if tx.type == 'income' %}Receita{% else %}Despesa{% endif %}
+                    </span>
+                </td>
+                <td class="description">{{ tx.description }}</td>
+                <td class="category">{{ tx.category.name }}</td>
+                <td class="amount amount-{{ tx.type }}">{{ tx.amount }}</td>
+                <td class="actions">
+                    <a href="{{ url_for('transaction.edit_transaction', transaction_id=tx.id) }}" class="btn-icon edit" title="Editar">✏️</a>
+                    <form method="POST" action="{{ url_for('transaction.delete_transaction', transaction_id=tx.id) }}" class="delete-form" onsubmit="return confirm('Tem certeza que deseja remover esta transação?');">
+                        <button type="submit" class="btn-icon delete" title="Remover">🗑️</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="empty-state">
+    <p>Nenhuma transação registrada ainda.</p>
+    <a href="{{ url_for('transaction.create_transaction') }}" class="btn btn-primary">Criar primeira transação</a>
+</div>
+{% endif %}
+{% endblock %}

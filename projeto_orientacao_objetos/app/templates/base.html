@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Controlador Financeiro{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="container">
+        {% if session.get('user_id') %}
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <h1>Controlador Financeiro</h1>
+            </div>
+            <ul class="navbar-menu">
+                <li><a href="{{ url_for('transaction.list_transactions') }}" class="nav-link">Transações</a></li>
+                <li><a href="{{ url_for('investment.list_investments') }}" class="nav-link">Investimentos</a></li>
+                <li><a href="{{ url_for('report.index') }}" class="nav-link">Relatórios</a></li>
+                <li><a href="{{ url_for('category.list_categories') }}" class="nav-link">Categorias</a></li>
+                <li class="navbar-user">
+                    <span>{{ session.get('username') }}</span>
+                    <a href="{{ url_for('auth.logout') }}" class="nav-link logout">Sair</a>
+                </li>
+            </ul>
+        </nav>
+        {% endif %}
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                        <button class="alert-close" onclick="this.parentElement.style.display='none';">&times;</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

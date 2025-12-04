@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastro - Controlador Financeiro{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-box">
+        <h2>Cadastro</h2>
+        <p class="auth-subtitle">Crie uma conta para começar a gerenciar suas finanças</p>
+
+        <form method="POST" class="auth-form">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    required 
+                    placeholder="Escolha um username"
+                    class="form-control"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    required 
+                    placeholder="seu@email.com"
+                    class="form-control"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Senha:</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    required 
+                    placeholder="Mínimo 6 caracteres"
+                    class="form-control"
+                >
+                <small class="form-text">Mínimo 6 caracteres</small>
+            </div>
+
+            <div class="form-group">
+                <label for="password_confirm">Confirmar Senha:</label>
+                <input 
+                    type="password" 
+                    id="password_confirm" 
+                    name="password_confirm" 
+                    required 
+                    placeholder="Confirme sua senha"
+                    class="form-control"
+                >
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Cadastrar</button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Já tem uma conta? <a href="{{ url_for('auth.login') }}" class="auth-link">Faça login aqui</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
