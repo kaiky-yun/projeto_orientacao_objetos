@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Relatório Mensal - Controlador Financeiro{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Relatório Mensal</h2>
+</div>
+
+<div class="report-filters">
+    <form method="POST" class="filter-form">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="year">Ano:</label>
+                <select id="year" name="year" class="form-control">
+                    {% for year in years %}
+                    <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="month">Mês:</label>
+                <select id="month" name="month" class="form-control">
+                    <option value="">Selecione um mês</option>
+                    {% for month in months %}
+                    <option value="{{ month }}" {% if month == selected_month %}selected{% endif %}>
+                        {{ month_names[month] }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="type">Tipo:</label>
+                <select id="type" name="type" class="form-control">
+                    <option value="">Todos</option>
+                    <option value="income">Receitas</option>
+                    <option value="expense">Despesas</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% if report_data %}
+<div class="report-results">
+    <h3>{{ report_data.month_name }}/{{ report_data.year }}</h3>
+    
+    <div class="summary-cards">
+        <div class="summary-card income">
+            <h3>Receitas</h3>
+            <p class="amount">{{ report_data.income_total }}</p>
+        </div>
+        <div class="summary-card expense">
+            <h3>Despesas</h3>
+            <p class="amount">{{ report_data.expense_total }}</p>
+        </div>
+        <div class="summary-card balance">
+            <h3>Saldo</h3>
+            <p class="amount {% if report_data.balance.amount >= 0 %}positive{% else %}negative{% endif %}">
+                {{ report_data.balance }}
+            </p>
+        </div>
+    </div>
+
+    <div class="transactions-info">
+        <p>Total de transações: <strong>{{ report_data.transaction_count }}</strong></p>
+    </div>
+
+    {% if report_data.transactions %}
+    <div class="transactions-table">
+        <h4>Transações do Mês</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                    <th>Categoria</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tx in report_data.transactions %}
+                <tr class="transaction-row transaction-{{ tx.type }}">
+                    <td class="date">{{ tx.occurred_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td class="type">
+                        <span class="badge badge-{{ tx.type }}">
+                            {% if tx.type == 'income' %}Receita{% else %}Despesa{% endif %}
+                        </span>
+                    </td>
+                    <td class="description">{{ tx.description }}</td>
+                    <td class="category">{{ tx.category.name }}</td>
+                    <td class="amount amount-{{ tx.type }}">{{ tx.amount }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="empty-message">Nenhuma transação neste mês</p>
+    {% endif %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p>Selecione o ano e mês para visualizar o relatório</p>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Relatório por Categoria - Controlador Financeiro{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Relatório por Categoria</h2>
+</div>
+
+<div class="report-filters">
+    <form method="POST" class="filter-form">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="type">Tipo:</label>
+                <select id="type" name="type" class="form-control">
+                    <option value="">Todos</option>
+                    <option value="income" {% if filters.type == 'income' %}selected{% endif %}>Receitas</option>
+                    <option value="expense" {% if filters.type == 'expense' %}selected{% endif %}>Despesas</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="start_date">Data Inicial:</label>
+                <input 
+                    type="date" 
+                    id="start_date" 
+                    name="start_date" 
+                    value="{{ filters.start_date }}"
+                    class="form-control"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="end_date">Data Final:</label>
+                <input 
+                    type="date" 
+                    id="end_date" 
+                    name="end_date" 
+                    value="{{ filters.end_date }}"
+                    class="form-control"
+                >
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% if report_data %}
+<div class="report-results">
+    <h3>Resultado da Análise</h3>
+    
+    {% if report_data %}
+    <div class="category-report">
+        <table>
+            <thead>
+                <tr>
+                    <th>Categoria</th>
+                    <th>Total</th>
+                    <th>Percentual</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set total = report_data.values() | sum(attribute='amount') %}
+                {% for category, amount in report_data.items() %}
+                <tr>
+                    <td class="category-name">{{ category }}</td>
+                    <td class="amount">{{ amount }}</td>
+                    <td class="percentage">
+                        {% if total > 0 %}
+                            {{ "%.1f"|format((amount.amount / total) * 100) }}%
+                        {% else %}
+                            0%
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr class="total-row">
+                    <td><strong>TOTAL</strong></td>
+                    <td><strong>{{ report_data.values() | sum(attribute='amount') }}</strong></td>
+                    <td><strong>100%</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <!-- Gráfico de Barras Simples -->
+    <div class="chart-container">
+        <h4>Distribuição por Categoria</h4>
+        <div class="bar-chart">
+            {% set max_amount = report_data.values() | map(attribute='amount') | max %}
+            {% for category, amount in report_data.items() %}
+            <div class="bar-item">
+                <div class="bar-label">{{ category }}</div>
+                <div class="bar-wrapper">
+                    <div class="bar" style="width: {% if max_amount > 0 %}{{ (amount.amount / max_amount) * 100 }}{% else %}0{% endif %}%">
+                        <span class="bar-value">{{ amount }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <p class="empty-message">Nenhuma categoria encontrada com os filtros especificados</p>
+    {% endif %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p>Selecione os filtros e clique em "Gerar Relatório" para visualizar os dados</p>
+</div>
+{% endif %}
+{% endblock %}

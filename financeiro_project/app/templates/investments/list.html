@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Investimentos - Controlador Financeiro{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Investimentos</h2>
+    <a href="{{ url_for('investment.create_investment') }}" class="btn btn-primary">+ Novo Investimento</a>
+</div>
+
+<div class="summary-cards">
+    <div class="summary-card invested">
+        <h3>Total Investido</h3>
+        <p class="amount">{{ total_invested }}</p>
+    </div>
+    <div class="summary-card current">
+        <h3>Valor Atual</h3>
+        <p class="amount">{{ total_current }}</p>
+    </div>
+    <div class="summary-card profit {% if total_profit.amount >= 0 %}positive{% else %}negative{% endif %}">
+        <h3>Lucro/Prejuízo</h3>
+        <p class="amount">{{ total_profit }}</p>
+    </div>
+</div>
+
+{% if investments %}
+<div class="investments-table">
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Tipo</th>
+                <th>Valor Inicial</th>
+                <th>Valor Atual</th>
+                <th>Taxa Mensal</th>
+                <th>Lucro/Prejuízo</th>
+                <th>%</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for inv in investments %}
+            <tr class="investment-row">
+                <td class="name">{{ inv.name }}</td>
+                <td class="type">{{ inv.type }}</td>
+                <td class="amount">{{ inv.initial_amount }}</td>
+                <td class="amount">{{ inv.current_amount }}</td>
+                <td class="rate">{{ "%.2f"|format(inv.monthly_rate * 100) }}%</td>
+                <td class="profit {% if inv.profit.amount >= 0 %}positive{% else %}negative{% endif %}">{{ inv.profit }}</td>
+                <td class="percentage {% if inv.profit_percentage >= 0 %}positive{% else %}negative{% endif %}">{{ "%.2f"|format(inv.profit_percentage) }}%</td>
+                <td class="actions">
+                    <a href="{{ url_for('investment.edit_investment', investment_id=inv.id) }}" class="btn-icon edit" title="Editar">✏️</a>
+                    <form method="POST" action="{{ url_for('investment.delete_investment', investment_id=inv.id) }}" class="delete-form" onsubmit="return confirm('Tem certeza que deseja remover este investimento?');">
+                        <button type="submit" class="btn-icon delete" title="Remover">🗑️</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="empty-state">
+    <p>Nenhum investimento registrado ainda.</p>
+    <a href="{{ url_for('investment.create_investment') }}" class="btn btn-primary">Criar primeiro investimento</a>
+</div>
+{% endif %}
+{% endblock %}

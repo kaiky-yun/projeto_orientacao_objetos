@@ -1,0 +1,271 @@
+================================================================================
+CONTROLADOR FINANCEIRO - ORIENTAÇÃO A OBJETOS
+================================================================================
+
+PROJETO REFATORADO COMPLETAMENTE COM:
+✓ Orientação a Objetos em Python
+✓ Arquitetura em Camadas (Models, Repositories, Services, Controllers)
+✓ Login com Criptografia bcrypt
+✓ CRUD Completo de Transações
+✓ CRUD Completo de Investimentos
+✓ Controle de Acesso por Sessão
+✓ Templates HTML/Jinja2
+✓ CSS Responsivo
+✓ JavaScript Funcional
+✓ Cache Flask-Caching
+✓ Armazenamento em JSON
+
+================================================================================
+COMO EXECUTAR
+================================================================================
+
+1. Ativar Virtual Environment:
+   $ cd /home/ubuntu/financeiro_oo_refactored
+   $ source venv/bin/activate
+
+2. Instalar Dependências (se necessário):
+   $ pip install -r requirements.txt
+
+3. Executar a Aplicação:
+   $ python run.py
+
+4. Acessar no Navegador:
+   http://localhost:5000
+
+================================================================================
+FUNCIONALIDADES IMPLEMENTADAS
+================================================================================
+
+AUTENTICAÇÃO:
+- Cadastro de usuários com validação
+- Login com username ou email
+- Criptografia bcrypt de senhas (mínimo 6 caracteres)
+- Controle de acesso por sessão
+- Logout com limpeza de sessão
+
+TRANSAÇÕES (CRUD):
+- Listar todas as transações do usuário
+- Criar nova transação (receita ou despesa)
+- Editar transação existente
+- Deletar transação
+- Filtro por tipo (receita/despesa)
+- Categorização automática
+- Cálculo de saldo, receitas totais e despesas totais
+
+INVESTIMENTOS (CRUD):
+- Listar todos os investimentos do usuário
+- Criar novo investimento
+- Editar investimento existente
+- Deletar investimento
+- Tipos: Renda Fixa, Renda Variável, Fundo, Criptomoeda, Outro
+- Cálculo automático de lucro/prejuízo
+- Cálculo de percentual de retorno
+
+INTERFACE:
+- Navbar com navegação
+- Alertas de sucesso/erro com auto-fechamento
+- Formulários com validação
+- Tabelas responsivas
+- Cards de resumo financeiro
+- Design limpo e profissional
+
+================================================================================
+ARQUITETURA DO PROJETO
+================================================================================
+
+CAMADA DE MODELOS (Domain Layer):
+- Money: Value Object para valores monetários com precisão decimal
+- Category: Modelo de categoria com categorias padrão
+- Transaction: Modelo de transação com validações
+- User: Modelo de usuário com criptografia bcrypt
+- Investment: Modelo de investimento com cálculos
+
+CAMADA DE REPOSITÓRIOS (Data Access Layer):
+- BaseRepository: Classe abstrata com interface CRUD
+- JSONStorage: Persistência em JSON com thread-safety
+- UserRepository: Operações CRUD para usuários
+- TransactionRepository: Operações CRUD para transações
+- InvestmentRepository: Operações CRUD para investimentos
+
+CAMADA DE SERVIÇOS (Business Logic Layer):
+- AuthService: Autenticação, registro, validação de credenciais
+- FinanceService: Lógica de transações, cálculos financeiros
+- InvestmentService: Lógica de investimentos, análises
+
+CAMADA DE CONTROLADORES (Presentation Layer):
+- auth_controller: Rotas de login, cadastro, logout
+- transaction_controller: Rotas CRUD de transações
+- investment_controller: Rotas CRUD de investimentos
+
+CAMADA DE APRESENTAÇÃO:
+- Templates Jinja2: HTML responsivo
+- CSS: Estilos modernos com suporte mobile
+- JavaScript: Validação e interatividade
+
+================================================================================
+ESTRUTURA DE ARQUIVOS
+================================================================================
+
+financeiro_oo_refactored/
+├── app/
+│   ├── __init__.py                    # Factory da aplicação
+│   ├── models/                        # Modelos de domínio
+│   │   ├── __init__.py
+│   │   ├── money.py                   # Value Object Money
+│   │   ├── category.py                # Modelo Category
+│   │   ├── transaction.py             # Modelo Transaction
+│   │   ├── user.py                    # Modelo User
+│   │   └── investment.py              # Modelo Investment
+│   ├── repositories/                  # Repositórios
+│   │   ├── __init__.py
+│   │   ├── base.py                    # Classe base abstrata
+│   │   ├── storage.py                 # JSONStorage
+│   │   ├── user_repository.py         # UserRepository
+│   │   ├── transaction_repository.py  # TransactionRepository
+│   │   └── investment_repository.py   # InvestmentRepository
+│   ├── services/                      # Serviços
+│   │   ├── __init__.py
+│   │   ├── auth_service.py            # AuthService
+│   │   ├── finance_service.py         # FinanceService
+│   │   └── investment_service.py      # InvestmentService
+│   ├── controllers/                   # Controladores
+│   │   ├── __init__.py
+│   │   ├── auth_controller.py         # Rotas de autenticação
+│   │   ├── transaction_controller.py  # Rotas de transações
+│   │   └── investment_controller.py   # Rotas de investimentos
+│   ├── templates/                     # Templates Jinja2
+│   │   ├── base.html                  # Template base
+│   │   ├── auth/
+│   │   │   ├── login.html
+│   │   │   └── register.html
+│   │   ├── transactions/
+│   │   │   ├── list.html
+│   │   │   ├── create.html
+│   │   │   └── edit.html
+│   │   └── investments/
+│   │       ├── list.html
+│   │       ├── create.html
+│   │       └── edit.html
+│   └── static/                        # Arquivos estáticos
+│       ├── css/
+│       │   └── style.css              # Estilos CSS
+│       └── js/
+│           └── main.js                # JavaScript
+├── config.py                          # Configuração
+├── run.py                             # Ponto de entrada
+├── requirements.txt                   # Dependências
+├── README.md                          # Documentação
+├── SETUP.md                           # Guia de setup
+└── venv/                              # Virtual environment
+
+================================================================================
+DEPENDÊNCIAS
+================================================================================
+
+Flask==3.0.0                   # Framework web
+Flask-Caching==2.1.0          # Cache
+Flask-CORS==4.0.0             # CORS
+Werkzeug==3.0.0               # Utilities
+bcrypt==4.1.2                 # Criptografia
+python-dotenv==1.0.0          # Variáveis de ambiente
+
+================================================================================
+DADOS PERSISTIDOS
+================================================================================
+
+Os dados são armazenados em JSON no diretório: ~/.financeiro_app/
+
+Arquivos:
+- users.json: Dados de usuários
+- transactions.json: Dados de transações
+- investments.json: Dados de investimentos
+- *.json.bak: Backups automáticos
+
+================================================================================
+SEGURANÇA
+================================================================================
+
+✓ Senhas criptografadas com bcrypt
+✓ Sessões HTTP seguras
+✓ Validação de entrada em todos os formulários
+✓ Proteção de rotas com @login_required
+✓ JSONStorage thread-safe
+✓ Backups automáticos de dados
+
+================================================================================
+PADRÕES DE DESIGN UTILIZADOS
+================================================================================
+
+✓ Factory Pattern: create_app()
+✓ Repository Pattern: Abstração de dados
+✓ Service Layer: Lógica de negócio
+✓ Value Object: Classe Money
+✓ Decorator Pattern: @login_required
+✓ MVC Pattern: Models, Views (Controllers), Templates
+
+================================================================================
+TESTES RECOMENDADOS
+================================================================================
+
+1. Teste de Cadastro:
+   - Cadastre um novo usuário
+   - Verifique se a senha foi criptografada
+   - Tente cadastrar username/email duplicado
+
+2. Teste de Login:
+   - Faça login com username
+   - Faça login com email
+   - Tente login com credenciais inválidas
+
+3. Teste de Transações:
+   - Crie receita e despesa
+   - Verifique cálculo de saldo
+   - Edite e delete transações
+   - Verifique categorias
+
+4. Teste de Investimentos:
+   - Crie investimento com lucro
+   - Crie investimento com prejuízo
+   - Verifique cálculos de percentual
+   - Edite e delete investimentos
+
+5. Teste de Segurança:
+   - Tente acessar rotas sem login
+   - Verifique se dados de outros usuários não são acessíveis
+   - Teste logout
+
+================================================================================
+MELHORIAS FUTURAS
+================================================================================
+
+- Relatórios em PDF
+- Gráficos de análise
+- Exportação CSV/Excel
+- OAuth2
+- API REST
+- Testes automatizados
+- Integração com APIs de cotação
+- Notificações por email
+- Backup automático em cloud
+- Dashboard com widgets
+
+================================================================================
+NOTAS IMPORTANTES
+================================================================================
+
+1. O projeto foi completamente refatorado com Orientação a Objetos
+2. Todas as funcionalidades do projeto original foram mantidas
+3. A arquitetura é escalável e fácil de manter
+4. O código segue boas práticas de design
+5. A interface é responsiva e funciona em mobile
+6. Os dados são persistidos em JSON (sem banco de dados)
+7. A aplicação está pronta para produção com ajustes mínimos
+
+================================================================================
+AUTOR
+================================================================================
+
+Desenvolvido como projeto de aprendizado em Orientação a Objetos com Python.
+Dezembro de 2025.
+
+================================================================================

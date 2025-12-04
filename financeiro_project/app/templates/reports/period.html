@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Relatório por Período - Controlador Financeiro{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Relatório por Período Personalizado</h2>
+</div>
+
+<div class="report-filters">
+    <form method="POST" class="filter-form">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="start_date">Data Inicial:</label>
+                <input 
+                    type="date" 
+                    id="start_date" 
+                    name="start_date" 
+                    value="{{ filters.start_date }}"
+                    required
+                    class="form-control"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="end_date">Data Final:</label>
+                <input 
+                    type="date" 
+                    id="end_date" 
+                    name="end_date" 
+                    value="{{ filters.end_date }}"
+                    required
+                    class="form-control"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="type">Tipo:</label>
+                <select id="type" name="type" class="form-control">
+                    <option value="">Todos</option>
+                    <option value="income" {% if filters.type == 'income' %}selected{% endif %}>Receitas</option>
+                    <option value="expense" {% if filters.type == 'expense' %}selected{% endif %}>Despesas</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% if report_data %}
+<div class="report-results">
+    <h3>Período: {{ report_data.start_date.strftime('%d/%m/%Y') }} a {{ report_data.end_date.strftime('%d/%m/%Y') }}</h3>
+    
+    <div class="summary-cards">
+        <div class="summary-card income">
+            <h3>Receitas</h3>
+            <p class="amount">{{ report_data.income_total }}</p>
+        </div>
+        <div class="summary-card expense">
+            <h3>Despesas</h3>
+            <p class="amount">{{ report_data.expense_total }}</p>
+        </div>
+        <div class="summary-card balance">
+            <h3>Saldo</h3>
+            <p class="amount {% if report_data.balance.amount >= 0 %}positive{% else %}negative{% endif %}">
+                {{ report_data.balance }}
+            </p>
+        </div>
+    </div>
+
+    <div class="transactions-info">
+        <p>Total de transações: <strong>{{ report_data.transaction_count }}</strong></p>
+    </div>
+
+    <!-- Análise por Categoria -->
+    {% if report_data.by_category %}
+    <div class="category-analysis">
+        <h4>Análise por Categoria</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Categoria</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category, amount in report_data.by_category.items() %}
+                <tr>
+                    <td class="category-name">{{ category }}</td>
+                    <td class="amount">{{ amount }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- Transações Detalhadas -->
+    {% if report_data.transactions %}
+    <div class="transactions-table">
+        <h4>Transações do Período</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                    <th>Categoria</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tx in report_data.transactions %}
+                <tr class="transaction-row transaction-{{ tx.type }}">
+                    <td class="date">{{ tx.occurred_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td class="type">
+                        <span class="badge badge-{{ tx.type }}">
+                            {% if tx.type == 'income' %}Receita{% else %}Despesa{% endif %}
+                        </span>
+                    </td>
+                    <td class="description">{{ tx.description }}</td>
+                    <td class="category">{{ tx.category.name }}</td>
+                    <td class="amount amount-{{ tx.type }}">{{ tx.amount }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="empty-message">Nenhuma transação neste período</p>
+    {% endif %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p>Selecione o período e clique em "Gerar Relatório" para visualizar os dados</p>
+</div>
+{% endif %}
+{% endblock %}

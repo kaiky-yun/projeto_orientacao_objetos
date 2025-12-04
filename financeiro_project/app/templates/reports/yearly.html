@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Relatório Anual - Controlador Financeiro{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Relatório Anual</h2>
+</div>
+
+<div class="report-filters">
+    <form method="POST" class="filter-form">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="year">Ano:</label>
+                <select id="year" name="year" class="form-control">
+                    {% for year in years %}
+                    <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% if report_data %}
+<div class="report-results">
+    <h3>Resumo Anual - {{ report_data.year }}</h3>
+    
+    <div class="summary-cards">
+        <div class="summary-card income">
+            <h3>Receitas Totais</h3>
+            <p class="amount">{{ report_data.income_total }}</p>
+        </div>
+        <div class="summary-card expense">
+            <h3>Despesas Totais</h3>
+            <p class="amount">{{ report_data.expense_total }}</p>
+        </div>
+        <div class="summary-card balance">
+            <h3>Saldo Anual</h3>
+            <p class="amount {% if report_data.balance.amount >= 0 %}positive{% else %}negative{% endif %}">
+                {{ report_data.balance }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Tabela Mensal -->
+    {% if report_data.monthly_data %}
+    <div class="monthly-table">
+        <h4>Detalhamento Mensal</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Mês</th>
+                    <th>Receitas</th>
+                    <th>Despesas</th>
+                    <th>Saldo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for month in report_data.monthly_data %}
+                <tr>
+                    <td class="month-name">{{ month.month_name }}</td>
+                    <td class="amount income">{{ month.income }}</td>
+                    <td class="amount expense">{{ month.expense }}</td>
+                    <td class="amount {% if month.balance.amount >= 0 %}positive{% else %}negative{% endif %}">
+                        {{ month.balance }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr class="total-row">
+                    <td><strong>TOTAL</strong></td>
+                    <td><strong>{{ report_data.income_total }}</strong></td>
+                    <td><strong>{{ report_data.expense_total }}</strong></td>
+                    <td><strong>{{ report_data.balance }}</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <!-- Gráfico de Barras Simples -->
+    <div class="chart-container">
+        <h4>Evolução Mensal</h4>
+        <div class="bar-chart">
+            {% set max_balance = report_data.monthly_data | map(attribute='balance') | map(attribute='amount') | max %}
+            {% for month in report_data.monthly_data %}
+            <div class="bar-item">
+                <div class="bar-label">{{ month_names[month.month] }}</div>
+                <div class="bar-wrapper">
+                    <div class="bar {% if month.balance.amount >= 0 %}positive{% else %}negative{% endif %}" 
+                         style="height: {% if max_balance > 0 %}{{ (month.balance.amount / max_balance) * 100 }}{% else %}0{% endif %}%">
+                        <span class="bar-value">{{ month.balance }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p>Selecione o ano e clique em "Gerar Relatório" para visualizar os dados</p>
+</div>
+{% endif %}
+{% endblock %}
